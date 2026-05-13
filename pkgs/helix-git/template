@@ -13,9 +13,7 @@ hostmakedepends="
  pkg-config
 "
 
-depends="
- git
-"
+depends="git"
 
 short_desc="Post-modern modal text editor (latest git master)"
 maintainer="Sunny <you@example.com>"
@@ -27,10 +25,24 @@ checksum=dbd527ee2e00a6b0163e215aedac88727caae8c6d880e8b8c5d12c9afd7f53ca
 
 conflicts="helix>=0"
 
-cargo_build_args="--package helix-term"
+do_build() {
+	cargo build \
+		--release \
+		--locked \
+		--offline \
+		-p helix-term
+}
 
-post_install() {
-	# Remove stray compiled binaries shipped inside some grammar sources
+do_install() {
+	vbin target/${RUST_TARGET}/release/hx
+
+	vmkdir usr/lib/helix
+	cp -r runtime ${DESTDIR}/usr/lib/helix/
+
+	vlicense LICENSE
+	vdoc README.md
+
+	# Remove stray binaries shipped in grammar sources
 	find ${DESTDIR}/usr/lib/helix/runtime/grammars/sources \
 		-type f -name "a.out" -delete
 }
