@@ -32,7 +32,7 @@ sudo xbps-install -S
 XBPS will ask to import the RSA key. Verify the fingerprint:
 ```
 Signed by: Sunny <sunnybhowmick0310@gmail.com>
-Fingerprint: 6d:d4:53:6c:e1:d8:1a:2c:06:6e:91:f1:98:d1:23:bc
+Fingerprint: aa:a7:a1:c4:12:b7:f9:e5:3f:18:c3:3f:6a:3c:9e:57
 ```
 
 **3. Install:**

@@ -1,32 +1,20 @@
 pkgname=helix-git
-# version and _commit are managed automatically by .github/workflows/update-helix-git.yml
-# DO NOT edit these lines manually
 version=20260512
 revision=1
 _commit="8c41b11607924f7584b77c8a6e6b16439a2f559f"
+
 short_desc="Post-modern modal text editor (built from latest master)"
 maintainer="Your Name <you@example.com>"
 license="MPL-2.0"
 homepage="https://helix-editor.com"
+
 distfiles="https://github.com/helix-editor/helix/archive/${_commit}.tar.gz"
 checksum="dbd527ee2e00a6b0163e215aedac88727caae8c6d880e8b8c5d12c9afd7f53ca"
 
-hostmakedepends="cargo git"
-conflicts="helix>=0"
-make_install_args="--path helix-term"
 build_style=cargo
+hostmakedepends="cargo git pkg-config"
 
-post_install() {
-	vmkdir usr/lib/helix
-	vcopy runtime usr/lib/helix/runtime
+cargo_build_args="--package helix-term"
+make_build_args="--locked"
 
-	[ -f contrib/completion/hx.bash ] && vinstall contrib/completion/hx.bash 644 usr/share/bash-completion/completions hx
-	[ -f contrib/completion/hx.fish ] && vinstall contrib/completion/hx.fish 644 usr/share/fish/vendor_completions.d hx.fish
-	[ -f contrib/completion/hx.zsh  ] && vinstall contrib/completion/hx.zsh  644 usr/share/zsh/site-functions _hx
-	[ -f contrib/Helix.desktop ]       && vinstall contrib/Helix.desktop       644 usr/share/applications
-
-	vmkdir etc/profile.d
-	cat > ${DESTDIR}/etc/profile.d/helix.sh <<-'EOF'
-		export HELIX_RUNTIME=/usr/lib/helix/runtime
-	EOF
-}
+conflicts="helix>=0"
