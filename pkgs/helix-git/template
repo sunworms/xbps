@@ -13,6 +13,7 @@ checksum="dbd527ee2e00a6b0163e215aedac88727caae8c6d880e8b8c5d12c9afd7f53ca"
 
 hostmakedepends="cargo git"
 conflicts="helix>=0"
+make_install_args="--path helix-term"
 build_style=cargo
 
 post_install() {

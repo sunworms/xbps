@@ -11,7 +11,7 @@ distfiles="https://github.com/imputnet/helium-linux/releases/download/${version}
 checksum="0000000000000000000000000000000000000000000000000000000000000000"
 
 only_for_archs="x86_64"
-depends="glib dbus gtk+3 nss libXcomposite libXdamage libXrandr libXScrnSaver alsa-lib cups-libs"
+depends="glib dbus gtk+3 nss libXcomposite libXdamage libXrandr libXScrnSaver alsa-lib libcups"
 conflicts="helium>=0"
 
 do_extract() {

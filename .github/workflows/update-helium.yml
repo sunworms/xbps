@@ -41,7 +41,6 @@ jobs:
 
       - name: Compute new checksum
         id: checksum
-        if: steps.upstream.outputs.version != steps.current.outputs.version
         run: |
           VERSION="${{ steps.upstream.outputs.version }}"
           URL="https://github.com/imputnet/helium-linux/releases/download/${VERSION}/helium-${VERSION}-x86_64_linux.tar.xz"
@@ -61,8 +60,11 @@ jobs:
             -e "s|^checksum=.*|checksum=\"${SHA256}\"|" \
             pkgs/helium-browser-bin/template
 
+          echo "updated=true" >> "$GITHUB_OUTPUT"
+
+
       - name: Commit and push
-        if: steps.upstream.outputs.commit != steps.current.outputs.commit
+        if: steps.update.outputs.updated == 'true'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
