@@ -253,10 +253,12 @@ jobs:
 
           PKGS_BUILT=false
           if ls repo/*.xbps 1>/dev/null 2>&1; then
+            xbps-rindex --clean repo/ 2>/dev/null
             xbps-rindex -a repo/*.xbps 2>/dev/null
             PKGS_BUILT=true
           fi
           if [ -d repo/nonfree ] && ls repo/nonfree/*.xbps 1>/dev/null 2>&1; then
+            xbps-rindex --clean repo/ 2>/dev/null
             xbps-rindex -a repo/nonfree/*.xbps 2>/dev/null
             PKGS_BUILT=true
           fi
