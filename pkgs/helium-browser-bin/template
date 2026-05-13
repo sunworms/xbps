@@ -12,7 +12,7 @@ checksum="07aa91427e053a20d3f76074d4daf36b4e152d16c48c104bcddf9d1a42f9a23f"
 
 only_for_archs="x86_64"
 depends="glib dbus gtk+3 nss libXcomposite libXdamage libXrandr libXScrnSaver alsa-lib libcups"
-hostmakedepends="tar"
+hostmakedepends="tar xz"
 conflicts="helium>=0"
 
 do_extract() {

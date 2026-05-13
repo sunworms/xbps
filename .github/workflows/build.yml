@@ -6,6 +6,13 @@ permissions:
   id-token: write
 
 on:
+  workflow_run:
+    workflows:
+      - Update helium-browser-bin
+      - Update helix-git
+      - Update font-aporetic
+    types:
+      - completed
   push:
     branches:
       - main
@@ -31,6 +38,7 @@ env:
 
 jobs:
   build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
 
