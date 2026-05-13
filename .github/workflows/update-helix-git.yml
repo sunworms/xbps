@@ -3,7 +3,7 @@ name: Update helix-git
 on:
   schedule:
     # Check for new helix master commits every hour
-    - cron: "15 * * * *"
+    - cron: '0 0,12 * * *'
   workflow_dispatch:
 
 permissions:
