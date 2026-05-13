@@ -1,15 +1,15 @@
 pkgname=font-aporetic
 # version and checksum are managed automatically by .github/workflows/update-font-aporetic.yml
 # DO NOT edit these lines manually
-version=20250427
+version=20250531
 revision=1
-_commit="main"
+_commit="c24b318ae52fa50bfd6684019c94875a38751fd6"
 short_desc="Aporetic fonts — custom Iosevka build by Protesilaos Stavrou"
 maintainer="Your Name <you@example.com>"
 license="OFL-1.1"
 homepage="https://github.com/protesilaos/aporetic"
 distfiles="https://github.com/protesilaos/aporetic/archive/${_commit}.tar.gz"
-checksum="0000000000000000000000000000000000000000000000000000000000000000"
+checksum="273ce8b14806d2f2f22f89a52b853fdc269f11ad6e02794898e85350ba2b63ef"
 noarch=yes
 depends="fontconfig"
 
