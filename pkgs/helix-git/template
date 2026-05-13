@@ -1,15 +1,15 @@
 pkgname=helix-git
 # version and _commit are managed automatically by .github/workflows/update-helix-git.yml
 # DO NOT edit these lines manually
-version=0.1.0
+version=20260512
 revision=1
-_commit="master"
+_commit="8c41b11607924f7584b77c8a6e6b16439a2f559f"
 short_desc="Post-modern modal text editor (built from latest master)"
 maintainer="Your Name <you@example.com>"
 license="MPL-2.0"
 homepage="https://helix-editor.com"
 distfiles="https://github.com/helix-editor/helix/archive/${_commit}.tar.gz"
-checksum="0000000000000000000000000000000000000000000000000000000000000000"
+checksum="dbd527ee2e00a6b0163e215aedac88727caae8c6d880e8b8c5d12c9afd7f53ca"
 
 hostmakedepends="cargo git"
 conflicts="helix>=0"
