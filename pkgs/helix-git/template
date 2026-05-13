@@ -32,9 +32,13 @@ do_install() {
 	vmkdir usr/lib/helix
 	cp -r runtime ${DESTDIR}/usr/lib/helix/
 
+	# Remove grammar source trees — they're huge and not needed at runtime
+	rm -rf ${DESTDIR}/usr/lib/helix/runtime/grammars/sources
+
+	# Remove any leftover build artifacts
+	find ${DESTDIR}/usr/lib/helix/runtime/grammars \
+		-type f -name "a.out" -delete
+
 	vlicense LICENSE
 	vdoc README.md
-
-	find ${DESTDIR}/usr/lib/helix/runtime/grammars/sources \
-		-type f -name "a.out" -delete
 }
