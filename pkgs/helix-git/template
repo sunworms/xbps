@@ -6,6 +6,7 @@ revision=1
 _commit=8c41b11607924f7584b77c8a6e6b16439a2f559f
 
 build_style=cargo
+make_build_args="-p helix-term"
 
 hostmakedepends="
  cargo
@@ -25,14 +26,6 @@ checksum=dbd527ee2e00a6b0163e215aedac88727caae8c6d880e8b8c5d12c9afd7f53ca
 
 conflicts="helix>=0"
 
-do_build() {
-	cargo build \
-		--release \
-		--locked \
-		--offline \
-		-p helix-term
-}
-
 do_install() {
 	vbin target/${RUST_TARGET}/release/hx
 
@@ -42,7 +35,6 @@ do_install() {
 	vlicense LICENSE
 	vdoc README.md
 
-	# Remove stray binaries shipped in grammar sources
 	find ${DESTDIR}/usr/lib/helix/runtime/grammars/sources \
 		-type f -name "a.out" -delete
 }
