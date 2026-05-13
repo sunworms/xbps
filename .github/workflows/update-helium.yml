@@ -1,0 +1,71 @@
+name: Update helium-browser-bin
+
+on:
+  schedule:
+    # Check for new releases twice a day
+    - cron: "30 6,18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.update.outputs.updated }}
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch latest stable release from helium-linux
+        id: upstream
+        run: |
+          # helium-linux tags the stable releases (not pre-releases)
+          RELEASE=$(curl -fsSL \
+            "https://api.github.com/repos/imputnet/helium-linux/releases/latest" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}")
+          VERSION=$(echo "$RELEASE" | jq -r '.tag_name')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Latest helium release: $VERSION"
+
+      - name: Read current version in template
+        id: current
+        run: |
+          CURRENT=$(grep '^version=' pkgs/helium-browser-bin/template | cut -d= -f2)
+          echo "version=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "Current template version: $CURRENT"
+
+      - name: Compute new checksum
+        id: checksum
+        if: steps.upstream.outputs.version != steps.current.outputs.version
+        run: |
+          VERSION="${{ steps.upstream.outputs.version }}"
+          URL="https://github.com/imputnet/helium-linux/releases/download/${VERSION}/helium-${VERSION}-x86_64_linux.tar.xz"
+          SHA256=$(curl -fsSL "$URL" | sha256sum | awk '{print $1}')
+          echo "sha256=$SHA256" >> "$GITHUB_OUTPUT"
+          echo "New checksum: $SHA256"
+
+      - name: Update template
+        id: update
+        if: steps.upstream.outputs.version != steps.current.outputs.version
+        run: |
+          VERSION="${{ steps.upstream.outputs.version }}"
+          SHA256="${{ steps.checksum.outputs.sha256 }}"
+
+          sed -i \
+            -e "s|^version=.*|version=${VERSION}|" \
+            -e "s|^checksum=.*|checksum=\"${SHA256}\"|" \
+            pkgs/helium-browser-bin/template
+
+      - name: Commit and push
+        if: steps.upstream.outputs.commit != steps.current.outputs.commit
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pkgs/helium-browser-bin/template
+          git commit -m "auto: helium-browser-bin → ${{ steps.upstream.outputs.version }}"
+          git push

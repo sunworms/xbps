@@ -1,0 +1,75 @@
+name: Update helix-git
+
+on:
+  schedule:
+    # Check for new helix master commits every hour
+    - cron: "15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.update.outputs.updated }}
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch latest helix master commit
+        id: upstream
+        run: |
+          COMMIT=$(curl -fsSL "https://api.github.com/repos/helix-editor/helix/commits/master" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            | jq -r '.sha')
+          DATE=$(curl -fsSL "https://api.github.com/repos/helix-editor/helix/commits/master" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            | jq -r '.commit.committer.date' | cut -c1-10 | tr -d '-')
+          echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+          echo "date=$DATE"     >> "$GITHUB_OUTPUT"
+          echo "Latest helix master: $COMMIT ($DATE)"
+
+      - name: Read current commit in template
+        id: current
+        run: |
+          CURRENT=$(grep '^_commit=' pkgs/helix-git/template | cut -d'"' -f2)
+          echo "commit=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "Current template commit: $CURRENT"
+
+      - name: Compute new checksum
+        id: checksum
+        if: steps.upstream.outputs.commit != steps.current.outputs.commit
+        run: |
+          COMMIT="${{ steps.upstream.outputs.commit }}"
+          URL="https://github.com/helix-editor/helix/archive/${COMMIT}.tar.gz"
+          SHA256=$(curl -fsSL "$URL" | sha256sum | awk '{print $1}')
+          echo "sha256=$SHA256" >> "$GITHUB_OUTPUT"
+          echo "New checksum: $SHA256"
+
+      - name: Update template
+        id: update
+        if: steps.upstream.outputs.commit != steps.current.outputs.commit
+        run: |
+          COMMIT="${{ steps.upstream.outputs.commit }}"
+          DATE="${{ steps.upstream.outputs.date }}"
+          SHA256="${{ steps.checksum.outputs.sha256 }}"
+
+          sed -i \
+            -e "s|^version=.*|version=${DATE}|" \
+            -e "s|^_commit=.*|_commit=\"${COMMIT}\"|" \
+            -e "s|^checksum=.*|checksum=\"${SHA256}\"|" \
+            pkgs/helix-git/template
+
+      - name: Commit and push
+        if: steps.upstream.outputs.commit != steps.current.outputs.commit
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pkgs/helix-git/template
+          git commit -m "auto: helix-git → ${{ steps.upstream.outputs.commit }}"
+          git push

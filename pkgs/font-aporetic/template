@@ -1,0 +1,23 @@
+pkgname=font-aporetic
+# version and checksum are managed automatically by .github/workflows/update-font-aporetic.yml
+# DO NOT edit these lines manually
+version=20250427
+revision=1
+_commit="main"
+short_desc="Aporetic fonts — custom Iosevka build by Protesilaos Stavrou"
+maintainer="Your Name <you@example.com>"
+license="OFL-1.1"
+homepage="https://github.com/protesilaos/aporetic"
+distfiles="https://github.com/protesilaos/aporetic/archive/${_commit}.tar.gz"
+checksum="0000000000000000000000000000000000000000000000000000000000000000"
+noarch=yes
+depends="fontconfig"
+
+do_install() {
+	vmkdir usr/share/fonts/aporetic
+	find ${wrksrc} -name "*.ttf" -exec vinstall {} 644 usr/share/fonts/aporetic \;
+}
+
+post_install() {
+	vtrigger fonts
+}
