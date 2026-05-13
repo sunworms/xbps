@@ -24,11 +24,9 @@ jobs:
       - name: Fetch latest stable release from helium-linux
         id: upstream
         run: |
-          # helium-linux tags the stable releases (not pre-releases)
-          RELEASE=$(curl -fsSL \
-            "https://api.github.com/repos/imputnet/helium-linux/releases/latest" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}")
-          VERSION=$(echo "$RELEASE" | jq -r '.tag_name')
+          VERSION=$(curl -fsSL \
+            https://api.github.com/repos/imputnet/helium-linux/tags \
+            | jq -r '.[0].name')
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Latest helium release: $VERSION"
 
