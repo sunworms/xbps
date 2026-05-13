@@ -1,20 +1,36 @@
+# Template file for 'helix-git'
 pkgname=helix-git
 version=20260512
 revision=1
-_commit="8c41b11607924f7584b77c8a6e6b16439a2f559f"
 
-short_desc="Post-modern modal text editor (built from latest master)"
-maintainer="Your Name <you@example.com>"
+_commit=8c41b11607924f7584b77c8a6e6b16439a2f559f
+
+build_style=cargo
+
+hostmakedepends="
+ cargo
+ git
+ pkg-config
+"
+
+depends="
+ git
+"
+
+short_desc="Post-modern modal text editor (latest git master)"
+maintainer="Sunny <you@example.com>"
 license="MPL-2.0"
 homepage="https://helix-editor.com"
 
 distfiles="https://github.com/helix-editor/helix/archive/${_commit}.tar.gz"
-checksum="dbd527ee2e00a6b0163e215aedac88727caae8c6d880e8b8c5d12c9afd7f53ca"
-
-build_style=cargo
-hostmakedepends="cargo git pkg-config"
-
-cargo_build_args="--package helix-term"
-make_build_args="--locked"
+checksum=dbd527ee2e00a6b0163e215aedac88727caae8c6d880e8b8c5d12c9afd7f53ca
 
 conflicts="helix>=0"
+
+cargo_build_args="--package helix-term"
+
+post_install() {
+	# Remove stray compiled binaries shipped inside some grammar sources
+	find ${DESTDIR}/usr/lib/helix/runtime/grammars/sources \
+		-type f -name "a.out" -delete
+}
