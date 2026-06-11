@@ -3,7 +3,7 @@ pkgname=helix-git
 version=20260610
 revision=1
 
-_commit=""
+_commit="1cbad945984e8409d3872b070afbb25fda525a5f"
 
 build_style=cargo
 make_build_args="-p helix-term"
@@ -22,7 +22,7 @@ license="MPL-2.0"
 homepage="https://helix-editor.com"
 
 distfiles="https://github.com/helix-editor/helix/archive/${_commit}.tar.gz"
-checksum="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+checksum="c2c1490f2b47d421621a137fb96778cb65521662df938cc072354030f8900ae9"
 
 conflicts="helix>=0"
 
