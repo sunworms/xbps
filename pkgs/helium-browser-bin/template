@@ -1,14 +1,14 @@
 pkgname=helium-browser-bin
 # version and checksum are managed automatically by .github/workflows/update-helium.yml
 # DO NOT edit these lines manually
-version=0.14.7.1
+version=0.14.8.2
 revision=1
 short_desc="Private, fast, and honest web browser based on Chromium (binary)"
 maintainer="Your Name <you@example.com>"
 license="BSD-3-Clause"
 homepage="https://github.com/imputnet/helium"
 distfiles="https://github.com/imputnet/helium-linux/releases/download/${version}/helium-${version}-x86_64_linux.tar.xz"
-checksum="5bba7e0c4c7ce69e7ab22fa134028554ce2af2b8796992d2f8136651316ba221"
+checksum="dd7530070f6c49080f8d3557de8046c0af4f41780de49fa4b5d2027b2ebbc001"
 
 only_for_archs="x86_64"
 depends="glib dbus gtk+3 nss libXcomposite libXdamage libXrandr libXScrnSaver alsa-lib libcups"
