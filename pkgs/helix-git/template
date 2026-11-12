@@ -1,9 +1,9 @@
 # Template file for 'helix-git'
 pkgname=helix-git
-version=20261110
+version=20261112
 revision=1
 
-_commit="57d864129eb54e1d4890a938e692ca465adaee3f"
+_commit="7f0087ca992f48983d7d219538509fb7faea7d0c"
 
 build_style=cargo
 make_build_args="-p helix-term"
@@ -22,7 +22,7 @@ license="MPL-2.0"
 homepage="https://helix-editor.com"
 
 distfiles="https://github.com/helix-editor/helix/archive/${_commit}.tar.gz"
-checksum="f45a080fd5a23323748513ef243c2b2dc6af0a70c36c3d258c1303e961315a1e"
+checksum="7a7c400fbada091d8cc4f949ddf1bb0e32c96ec3aa086a5e8b1584c15bb1188e"
 
 conflicts="helix>=0"
 
